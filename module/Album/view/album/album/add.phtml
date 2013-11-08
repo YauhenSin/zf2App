@@ -1,0 +1,53 @@
+<?php
+echo $this->headScript()->prependFile($this->basePath() . '/js/typeahead.js');
+echo $this->headLink()->prependStylesheet($this->basePath() . '/css/typeahead.css');
+$form = $this->form;
+$form->prepare();
+
+?>
+<div class="row">
+<div class="col-md-3">
+    <div class="jumbotron">
+        <div class="container">
+            <p>Add new album!</p>
+        </div>
+    </div>
+</div>
+<div class="col-md-3">
+    <?php echo $this->form()->openTag($form); ?>
+    <div class="form-group">
+        <?php echo $this->formInput($form->get('artist')); ?>
+        <?php echo $this->formElementErrors($form->get("artist"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formInput($form->get('title')); ?>
+        <?php echo $this->formElementErrors($form->get("title"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formSubmit($form->get('submit')); ?>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+</div>
+
+<script>
+    /*$(function() {
+        $('#artist').autocomplete({
+            source: function (request, response) {
+                $.post('/album/names', request, response);
+            }
+        });
+    })*/
+    /*$('#artist').autocomplete({
+        source: function (request, response) {
+            $.post('/album/names', request, response);
+        }
+    });*/
+
+    $('#artist').typeahead({
+        name: 'artist',
+        remote: {
+            url: '/album/names?artistName=%QUERY'
+        }
+    });
+</script>
