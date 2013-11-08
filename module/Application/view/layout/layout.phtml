@@ -35,7 +35,9 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
+                        <?php if ($this->isAllowed('controller/Album\Controller\Album:add')) :?>
                         <li><a href="<?php echo $this->url('album', array('action'=>'add')) ?>"><?php echo $this->translate('History') ?></a></li>
+                        <?php endif; ?>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Guitar types
@@ -48,6 +50,9 @@
                             </ul>
                         </li>
                         <li><a href="<?php echo $this->url('home') ?>">Construction</a></li>
+                        <?php if ($this->isAllowed('controller/Album\Controller\Album:add')) :?>
+                            <li><a href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('My Account') ?></a></li>
+                        <?php endif; ?>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
