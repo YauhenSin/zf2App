@@ -45,6 +45,18 @@ class User implements UserInterface, ProviderInterface
 
     /**
      * @var string
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    protected $lastName;
+
+    /**
+     * @var string
      * @ORM\Column(type="string", length=128)
      */
     protected $password;
@@ -114,6 +126,26 @@ class User implements UserInterface, ProviderInterface
     public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
     }
 
     /**

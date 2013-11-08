@@ -25,7 +25,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'zfcuser',
-                    'action' => array('index'),
+                    'action' => array('index', 'changepassword', 'changeemail', 'save'),
                     'roles' => array('guest', 'user'),
                 ),
                 array(
