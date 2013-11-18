@@ -53,8 +53,8 @@ return array(
                     'roles' => array('administrator'),
                 ),
                 array(
-                    'controller' => 'Work\Controller\Work',
-                    'action' => array('index'),
+                    'controller' => 'work',
+                    'action' => array('show', 'add'),
                     'roles' => array('user'),
                 ),
             ),

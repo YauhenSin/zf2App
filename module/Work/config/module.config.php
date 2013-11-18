@@ -3,7 +3,7 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'Work\Controller\Work' => 'Work\Controller\WorkController',
+            'work' => 'Work\Controller\WorkController',
         ),
     ),
     'router' => array(
@@ -11,7 +11,7 @@ return array(
             'work' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => '/work[/:action][/:id]',
+                    'route' => '/work',
                     'constrains' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id' => '[0-9]+'
@@ -19,6 +19,29 @@ return array(
                     'defaults' => array(
                         'controller' => 'Work\Controller\Work',
                         'action' => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'add' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/add',
+                            'defaults' => array(
+                                'controller' => 'work',
+                                'action'     => 'add',
+                            ),
+                        ),
+                    ),
+                    'show' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/show',
+                            'defaults' => array(
+                                'controller' => 'work',
+                                'action'     => 'show',
+                            ),
+                        ),
                     ),
                 ),
             ),
