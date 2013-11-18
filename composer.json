@@ -15,6 +15,7 @@
         "zf-commons/zfc-base": "v0.1.2",
         "zf-commons/zfc-user": "dev-master",
         "zf-commons/zfc-user-doctrine-orm": "dev-master",
-        "bjyoungblood/bjy-authorize": "1.4.*"
+        "bjyoungblood/bjy-authorize": "1.4.*",
+        "zendframework/zftool": "dev-master"
     }
 }

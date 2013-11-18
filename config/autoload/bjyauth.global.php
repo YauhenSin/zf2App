@@ -52,6 +52,11 @@ return array(
                     'action' => array('add', 'names'),
                     'roles' => array('administrator'),
                 ),
+                array(
+                    'controller' => 'Work\Controller\Work',
+                    'action' => array('index'),
+                    'roles' => array('user'),
+                ),
             ),
         ),
     ),
