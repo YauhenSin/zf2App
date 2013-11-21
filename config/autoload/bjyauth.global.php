@@ -57,6 +57,11 @@ return array(
                     'action' => array('show', 'add'),
                     'roles' => array('artist'),
                 ),
+                array(
+                    'controller' => 'work',
+                    'action' => array('search'),
+                    'roles' => array('user', 'guest', 'artist'),
+                ),
             ),
         ),
     ),

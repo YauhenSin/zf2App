@@ -35,6 +35,21 @@ class WorkForm extends Form
             ),
         ));
         $this->add(array(
+            'name' => 'workGenre',
+            'type' => 'select',
+            'options' => array(
+                'empty_option' => 'Select genre',
+                'value_options' => array(
+                    '1' => 'one',
+                    '2' => 'two',
+                ),
+            ),
+            'attributes' => array(
+                'id' => 'workGenre',
+                'class' => 'form-control',
+            ),
+        ));
+        $this->add(array(
             'name' => 'workDescription',
             'attributes' => array(
                 'id' => 'workDescription',
@@ -42,11 +57,8 @@ class WorkForm extends Form
                 'class' => 'form-control',
                 'rows' => 6,
                 'placeholder' => 'Enter work description',
-//                'data-provide' => 'typeahead',
-//                'autocomplete' => "off",
             ),
             'options' => array(
-//                'label' => 'Artist'
             ),
         ));
         $this->add(array(

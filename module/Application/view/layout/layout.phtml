@@ -41,7 +41,7 @@
                         <li><a href="<?php echo $this->url('zfcuser/register'); ?>"><?php echo $this->translate('Registration') ?></a></li>
                         <li><a href="<?php echo $this->url('zfcuser/login'); ?>"><?php echo $this->translate('Sign In') ?></a></li>
                         <?php endif; ?>
-                        <?php if ($this->isAllowed('controller/Album\Controller\Album:add')) :?>
+                        <?php if ($this->isAllowed('controller/zfcuser:logout')) :?>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <?php echo $this->translate('My Account') ?>
@@ -49,15 +49,15 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Go to account'); ?></a></li>
-<!--                                    --><?php //if () :?>
-<!--                                    --><?php //endif;?>
-                                    <li><a href="<?php echo $this->url('work/show') ?>"><?php echo $this->translate('Show works'); ?></a></li>
-                                    <li><a href="<?php echo $this->url('work/add') ?>"><?php echo $this->translate('Add work'); ?></a></li>
-
+                                    <?php if ($this->isAllowed('controller/work:add')) :?>
+                                        <li><a href="<?php echo $this->url('work/show') ?>"><?php echo $this->translate('Show works'); ?></a></li>
+                                        <li><a href="<?php echo $this->url('work/add') ?>"><?php echo $this->translate('Add work'); ?></a></li>
+                                    <?php endif;?>
                                     <li><a href="<?php echo $this->url('zfcuser/logout') ?>"><?php echo $this->translate('Sign Out'); ?></a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>
+                        <li><a href="<?php echo $this->url('work/search'); ?>"><?php echo $this->translate('Search') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
@@ -66,7 +66,7 @@
             <?php echo $this->content; ?>
             <hr>
             <footer>
-                <p>Footer</p>
+                <p>Yauhen Siniauski &#169; 2013</p>
             </footer>
         </div> <!-- /container -->
         <?php echo $this->inlineScript() ?>

@@ -43,6 +43,16 @@ return array(
                             ),
                         ),
                     ),
+                    'search' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/search',
+                            'defaults' => array(
+                                'controller' => 'work',
+                                'action'     => 'search',
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'names' => array(

@@ -2,25 +2,21 @@
 $this->headScript()->prependFile($this->basePath() . '/lightbox/js/lightbox-2.6.min.js');
 $this->headLink()->prependStylesheet($this->basePath() . '/lightbox/css/lightbox.css');
 ?>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>pict</th>
-        <th>name</th>
-        <th>desc</th>
-        <th>price</th>
-    </tr>
-
-    </thead>
-    <tbody>
-<?php foreach ($this->works as $work) :?>
-    <tr>
-        <th>
-        <a href="<?php echo $this->imagePath . '/' . $work->getPictureHash();?>" data-lightbox="<?php echo $work->getPictureHash();?>" title="<?php echo $work->getName();?>"><img src="<?php echo $this->imagePath . '/' . $work->getPictureHash();?>" width="150" height="150"></th></a>
-        <th><?php echo $work->getName();?></th>
-        <th><?php echo $work->getDescription();?></th>
-        <th><?php echo $work->getPrice();?></th>
-    </tr>
-<?php endforeach;?>
-    </tbody>
-</table>
+<div class="row">
+    <?php $counter = 0; foreach ($this->works as $work):?>
+    <?php if ($counter == 3) $counter = 0;?>
+    <?php echo $counter == 0 ? '<div class="row">': '';?>
+    <div class="col-md-3 <?php echo $counter != 0 ? 'col-lg-offset-1': ''?>">
+        <div class="thumbnail" style="margin-bottom: 20px">
+            <a href="<?php echo $this->imagePath . '/' . $work->getPictureHash();?>" data-lightbox="<?php echo $work->getPictureHash();?>" title="<?php echo $work->getName();?>"><img src="<?php echo $this->imagePath . '/' . $work->getPictureHash();?>" style="max-width: 260px; height: 260px"></th></a>
+            <div class="caption">
+                <h3><?php echo $work->getName();?></h3>
+                <p>Genre: <?php echo $work->getGenre()->getName();?></p>
+                <p>Description:<br><?php echo $work->getDescription();?></p>
+                <p>Price: <?php echo $work->getPrice();?></p>
+            </div>
+        </div>
+    </div>
+    <?php echo $counter == 2 ? '</div>': ''; $counter++;?>
+    <?php endforeach;?>
+</div>

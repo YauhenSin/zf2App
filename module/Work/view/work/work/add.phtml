@@ -13,6 +13,10 @@ $form->prepare();
         <?php echo $this->formElementErrors($form->get("workName"), array('class' => "alert alert-danger")); ?>
     </div>
     <div class="form-group">
+        <?php echo $this->formSelect($form->get('workGenre')->setAttribute('options', $this->genre)); ?>
+        <?php echo $this->formElementErrors($form->get("workGenre"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
         <?php echo $this->formTextarea($form->get('workDescription')); ?>
         <?php echo $this->formElementErrors($form->get("workDescription"), array('class' => "alert alert-danger")); ?>
     </div>

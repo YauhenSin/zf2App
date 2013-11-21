@@ -10,6 +10,7 @@ use Zend\Validator\Date;
 use Zend\Validator\File\Count;
 use Zend\Validator\File\Extension;
 use Zend\Validator\File\Size;
+use Zend\View\Model\JsonModel;
 
 class WorkController extends AbstractActionController
 {
@@ -26,6 +27,7 @@ class WorkController extends AbstractActionController
 
     public function addAction()
     {
+        $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
         $request = $this->getRequest();
         $form = new WorkForm();
         if ($request->isPost()) {
@@ -42,6 +44,11 @@ class WorkController extends AbstractActionController
                 $objDateTime = new \DateTime('now');
                 $artistId = $this->getServiceLocator()->get('zfcuserauthservice')->getIdentity()->getId();
                 $path = getcwd() . "/public/uploads/works/" . $artistId;
+                if (!is_dir($path)) {
+                    if (!@mkdir($path, 0777, true)) {
+                        throw new \Exception("Unable to create destination: " . $path);
+                    }
+                }
                 $pictureHash = md5($objDateTime->getTimestamp() . $path);
                 $pictureExt = array_pop(explode('.', $post['workImage']['name']));
                 $filter = new \Zend\Filter\File\Rename($path . "/" . $pictureHash . "." . $pictureExt);
@@ -49,14 +56,8 @@ class WorkController extends AbstractActionController
                 $adapter->setFilters(array($filter), $post['workImage']);
                 $adapter->setValidators(array($size, $count, $extension), $post['workImage']);
                 if($adapter->isValid()) {
-                    $path = getcwd() . "/public/uploads/works/" . $artistId;
-                    if (!is_dir($path)) {
-                        if (!@mkdir($path, 0777, true)) {
-                            throw new \Exception("Unable to create destination: " . $path);
-                        }
-                    }
+
                     if($adapter->receive($post['workImage']['name'])) {
-                        $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
                         $newWork = new EntityWork();
                         $formData = $form->getData();
                         $newWork->setArtistId($artistId);
@@ -65,12 +66,44 @@ class WorkController extends AbstractActionController
                         $newWork->setPictureHash($pictureHash . '.' . $pictureExt);
                         $newWork->setPictureName($post['workImage']['name']);
                         $newWork->setPrice($formData['workPrice']);
+                        $newWork->setGenre($objectManager->getRepository('\Work\Entity\Genre')->findOneBy(array('id' => $formData['workGenre'])));
                         $objectManager->persist($newWork);
                         $objectManager->flush();
+                        return $this->redirect()->toRoute('work/show');
                     }
                 }
             }
         }
-        return array('form' => $form);
+        $genres = $objectManager->getRepository('\Work\Entity\Genre')->findAll();
+        $result = array();
+        foreach ($genres as $genre) {
+            $result[$genre->getId()] = $genre->getName();
+        }
+        return array('form' => $form, 'genre' => $result);
+    }
+
+    public function searchAction()
+    {
+        $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            return new JsonModel(array('0' => $this->params()->fromPost('workGenre')));
+        }
+
+
+        $works = $objectManager->getRepository('\Work\Entity\Work')->findAll();
+
+        $genres = $objectManager->getRepository('\Work\Entity\Genre')->findAll();
+        $result = array();
+        foreach ($genres as $genre) {
+            $result[$genre->getId()] = $genre->getName();
+        }
+        $form = new WorkForm();
+        return array(
+            'form' => $form,
+            'imagePath' => $_SERVER['DOCUMRNT_ROOT'].'/uploads/works/',
+            'works' => $works,
+            'genre' => $result,
+        );
     }
 }
