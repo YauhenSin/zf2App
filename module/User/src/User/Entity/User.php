@@ -77,6 +77,12 @@ class User implements UserInterface, ProviderInterface
     protected $roles;
 
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    protected $isArtist;
+
+    /**
      * Initialies the roles variable.
      */
     public function __construct()
@@ -256,5 +262,15 @@ class User implements UserInterface, ProviderInterface
     public function addRole($role)
     {
         $this->roles[] = $role;
+    }
+
+    public function setIsArtist($value)
+    {
+        $this->isArtist = $value;
+    }
+
+    public function isArtist()
+    {
+        return $this->isArtist;
     }
 }

@@ -1,3 +1,7 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/lightbox/js/lightbox-2.6.min.js');
+$this->headLink()->prependStylesheet($this->basePath() . '/lightbox/css/lightbox.css');
+?>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -11,7 +15,8 @@
     <tbody>
 <?php foreach ($this->works as $work) :?>
     <tr>
-        <th><img src="<?php echo $this->imagePath . '/' . $work->getPictureHash();?>" width="150" height="150"></th>
+        <th>
+        <a href="<?php echo $this->imagePath . '/' . $work->getPictureHash();?>" data-lightbox="<?php echo $work->getPictureHash();?>" title="<?php echo $work->getName();?>"><img src="<?php echo $this->imagePath . '/' . $work->getPictureHash();?>" width="150" height="150"></th></a>
         <th><?php echo $work->getName();?></th>
         <th><?php echo $work->getDescription();?></th>
         <th><?php echo $work->getPrice();?></th>

@@ -1,32 +1,37 @@
-<!--<ul class="nav nav-tabs" id="myTab">
-    <li class="active"><a href="#home">Home</a></li>
-    <li><a href="#profile">Profile</a></li>
-    <li><a href="#messages">Messages</a></li>
-    <li><a href="#settings">Settings</a></li>
-</ul>
-<div class="tab-content">
-    <div class="tab-pane active" id="home">
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="/img/Slide01.jpg" alt="...">
+                </div>
+                <div class="item">
+                    <img src="/img/Slide02.jpg" alt="...">
+                </div>
+            </div>
 
-    </div>
-    <div class="tab-pane" id="profile">
-        Profile
-    </div>
-    <div class="tab-pane" id="messages">
-        Messages
-    </div>
-    <div class="tab-pane" id="settings">
-        Settings
+            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
     </div>
 </div>
 
-<!--<a href="--><?php /*//echo $this->url('album', array('action'=>'add'));*/?><!--" class="btn btn-primary">Add new album</a>-->
-<!--<a href="--><?php //echo $this->url('zfcuser/register'); ?><!--">Registration</a><br>-->
-<!--<a href="--><?php //echo $this->url('zfcuser/login'); ?><!--">Sign In</a>-->
-Home Page
 
 <script>
     $('#myTab a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
+    });
+    $('.carousel').carousel({
+        interval: 2000
     })
 </script>
