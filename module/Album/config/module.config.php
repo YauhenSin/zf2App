@@ -25,7 +25,7 @@ return array(
             'names' => array(
                 'type' => 'literal',
                 'options' => array(
-                    'route' => '/names/[/:name]',
+                    'route' => '/names[/:name]',
                     'defaults' => array(
                         'controller' => 'Album\Controller\Album',
                         'action' => 'names',

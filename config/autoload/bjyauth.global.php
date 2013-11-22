@@ -54,7 +54,7 @@ return array(
                 ),
                 array(
                     'controller' => 'work',
-                    'action' => array('show', 'add'),
+                    'action' => array('show', 'add', 'edit'),
                     'roles' => array('artist'),
                 ),
                 array(

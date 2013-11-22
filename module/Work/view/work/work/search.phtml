@@ -41,9 +41,9 @@ $form->prepare();
             type: "POST",
             url: '/work/search',
             data: {workGenre:genre, workPrice:price},
-            success: function(json){
+            success: function(works){
                 $('#search').empty();
-                $('#search').append(json);
+                $('#search').append(works);
             }
         });
     }

@@ -33,6 +33,19 @@ return array(
                             ),
                         ),
                     ),
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit[/:id]',
+                            'constrains' => array(
+                                'id' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'work',
+                                'action'     => 'edit',
+                            ),
+                        ),
+                    ),
                     'show' => array(
                         'type' => 'Literal',
                         'options' => array(
@@ -58,7 +71,7 @@ return array(
             'names' => array(
                 'type' => 'literal',
                 'options' => array(
-                    'route' => '/names/[/:name]',
+                    'route' => '/names[/:name]',
                     'defaults' => array(
                         'controller' => 'Work\Controller\Work',
                         'action' => 'names',

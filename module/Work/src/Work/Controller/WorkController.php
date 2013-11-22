@@ -24,6 +24,7 @@ class WorkController extends AbstractActionController
         $worksView->setVariables(array(
             'imagePath' => $_SERVER['DOCUMRNT_ROOT'].'/uploads/works/',
             'works' => $works,
+            'artistId' => $this->getServiceLocator()->get('zfcuserauthservice')->getIdentity()->getId(),
         ));
         $showView = new ViewModel();
         $showView->setTemplate('work/work/show');
@@ -77,11 +78,14 @@ class WorkController extends AbstractActionController
             }
         }
         $genres = $objectManager->getRepository('\Work\Entity\Genre')->findAll();
-        $result = array();
+        $genreList = array();
         foreach ($genres as $genre) {
-            $result[$genre->getId()] = $genre->getName();
+            $genreList[$genre->getId()] = $genre->getName();
         }
-        return array('form' => $form, 'genre' => $result);
+        return array(
+            'form' => $form,
+            'genreList' => $genreList,
+        );
     }
 
     public function searchAction()
@@ -110,7 +114,7 @@ class WorkController extends AbstractActionController
                     'minPrice' => $workPrice[0],
                     'maxPrice' => $workPrice[1],
                 ))
-                ->orderBy('w.price', 'ASC')
+                ->orderBy('w.price', 'asc')
                 ->getQuery()
                 ->getResult();
         }
@@ -138,5 +142,24 @@ class WorkController extends AbstractActionController
         ));
         $searchView->addChild($worksView, 'worksView');
         return $searchView;
+    }
+
+    public function editAction()
+    {
+        $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+        $request = $this->getRequest();
+        $id = $this->params()->fromRoute('id');;
+        $work = $objectManager->getRepository('\Work\Entity\Work')->findOneBy(array('id' => $id));
+        $genres = $objectManager->getRepository('\Work\Entity\Genre')->findAll();
+        $genreList = array();
+        foreach ($genres as $genre) {
+            $genreList[$genre->getId()] = $genre->getName();
+        }
+        $form = new WorkForm();
+        return array(
+            'work' => $work,
+            'form' => $form,
+            'genreList' => $genreList,
+        );
     }
 }
