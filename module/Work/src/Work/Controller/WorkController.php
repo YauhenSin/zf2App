@@ -10,7 +10,7 @@ use Zend\Validator\Date;
 use Zend\Validator\File\Count;
 use Zend\Validator\File\Extension;
 use Zend\Validator\File\Size;
-use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class WorkController extends AbstractActionController
 {
@@ -19,10 +19,16 @@ class WorkController extends AbstractActionController
         $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
         $artistId = $this->getServiceLocator()->get('zfcuserauthservice')->getIdentity()->getId();
         $works = $objectManager->getRepository('\Work\Entity\Work')->findBy(array('artistId' => $artistId));
-        return array(
-            'imagePath' => $_SERVER['DOCUMRNT_ROOT'].'/uploads/works/' . $artistId,
+        $worksView = new ViewModel();
+        $worksView->setTemplate('work/work/works');
+        $worksView->setVariables(array(
+            'imagePath' => $_SERVER['DOCUMRNT_ROOT'].'/uploads/works/',
             'works' => $works,
-        );
+        ));
+        $showView = new ViewModel();
+        $showView->setTemplate('work/work/show');
+        $showView->addChild($worksView, 'worksView');
+        return $showView;
     }
 
     public function addAction()
@@ -40,7 +46,6 @@ class WorkController extends AbstractActionController
                 $size = new Size(array('min' => 10, 'max' => 10000000));
                 $count = new Count(array('min' => 0, 'max' => 1));
                 $extension = new Extension(array('extension' => array('jpg', 'jpeg', 'png')));
-
                 $objDateTime = new \DateTime('now');
                 $artistId = $this->getServiceLocator()->get('zfcuserauthservice')->getIdentity()->getId();
                 $path = getcwd() . "/public/uploads/works/" . $artistId;
@@ -55,22 +60,19 @@ class WorkController extends AbstractActionController
                 $adapter->setDestination($path);
                 $adapter->setFilters(array($filter), $post['workImage']);
                 $adapter->setValidators(array($size, $count, $extension), $post['workImage']);
-                if($adapter->isValid()) {
-
-                    if($adapter->receive($post['workImage']['name'])) {
-                        $newWork = new EntityWork();
-                        $formData = $form->getData();
-                        $newWork->setArtistId($artistId);
-                        $newWork->setName($formData['workName']);
-                        $newWork->setDescription($formData['workDescription']);
-                        $newWork->setPictureHash($pictureHash . '.' . $pictureExt);
-                        $newWork->setPictureName($post['workImage']['name']);
-                        $newWork->setPrice($formData['workPrice']);
-                        $newWork->setGenre($objectManager->getRepository('\Work\Entity\Genre')->findOneBy(array('id' => $formData['workGenre'])));
-                        $objectManager->persist($newWork);
-                        $objectManager->flush();
-                        return $this->redirect()->toRoute('work/show');
-                    }
+                if($adapter->isValid() && $adapter->receive($post['workImage']['name'])) {
+                    $newWork = new EntityWork();
+                    $formData = $form->getData();
+                    $newWork->setArtistId($artistId);
+                    $newWork->setName($formData['workName']);
+                    $newWork->setDescription($formData['workDescription']);
+                    $newWork->setPictureHash($pictureHash . '.' . $pictureExt);
+                    $newWork->setPictureName($post['workImage']['name']);
+                    $newWork->setPrice($formData['workPrice']);
+                    $newWork->setGenre($objectManager->getRepository('\Work\Entity\Genre')->findOneBy(array('id' => $formData['workGenre'])));
+                    $objectManager->persist($newWork);
+                    $objectManager->flush();
+                    return $this->redirect()->toRoute('work/show');
                 }
             }
         }
@@ -85,25 +87,56 @@ class WorkController extends AbstractActionController
     public function searchAction()
     {
         $objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            return new JsonModel(array('0' => $this->params()->fromPost('workGenre')));
+        $workGenre = $this->params()->fromPost('workGenre');
+        $workPrice = $this->params()->fromPost('workPrice');
+        if ($workGenre) {
+            $works = $objectManager->getRepository('\Work\Entity\Work')->createQueryBuilder('w')
+                ->where('w.price >= :minPrice')
+                ->andWhere('w.price <= :maxPrice')
+                ->andWhere('w.genre = :genre')
+                ->setParameters(array(
+                    'minPrice' => $workPrice[0],
+                    'maxPrice' => $workPrice[1],
+                    'genre' => $objectManager->getRepository('\Work\Entity\Genre')->findOneBy(array('id' => $workGenre))
+                ))
+                ->orderBy('w.price', 'ASC')
+                ->getQuery()
+                ->getResult();
+        } else {
+            $works = $objectManager->getRepository('\Work\Entity\Work')->createQueryBuilder('w')
+                ->where('w.price >= :minPrice')
+                ->andWhere('w.price <= :maxPrice')
+                ->setParameters(array(
+                    'minPrice' => $workPrice[0],
+                    'maxPrice' => $workPrice[1],
+                ))
+                ->orderBy('w.price', 'ASC')
+                ->getQuery()
+                ->getResult();
         }
-
-
-        $works = $objectManager->getRepository('\Work\Entity\Work')->findAll();
-
-        $genres = $objectManager->getRepository('\Work\Entity\Genre')->findAll();
-        $result = array();
-        foreach ($genres as $genre) {
-            $result[$genre->getId()] = $genre->getName();
-        }
-        $form = new WorkForm();
-        return array(
-            'form' => $form,
+        $worksView = new ViewModel();
+        $worksView->setTemplate('work/work/works');
+        $worksView->setVariables(array(
             'imagePath' => $_SERVER['DOCUMRNT_ROOT'].'/uploads/works/',
             'works' => $works,
-            'genre' => $result,
-        );
+        ));
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $worksView->setTerminal(true);
+            return $worksView;
+        }
+        $genres = $objectManager->getRepository('\Work\Entity\Genre')->findAll();
+        $genreList = array();
+        foreach ($genres as $genre) {
+            $genreList[$genre->getId()] = $genre->getName();
+        }
+        $form = new WorkForm();
+        $searchView = new ViewModel();
+        $searchView->setTemplate('work/work/search');
+        $searchView->setVariables(array(
+            'form' => $form,
+            'genreList' => $genreList,
+        ));
+        $searchView->addChild($worksView, 'worksView');
+        return $searchView;
     }
 }

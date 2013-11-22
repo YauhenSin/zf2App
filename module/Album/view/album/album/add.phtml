@@ -31,19 +31,6 @@ $form->prepare();
 </div>
 
 <script>
-    /*$(function() {
-        $('#artist').autocomplete({
-            source: function (request, response) {
-                $.post('/album/names', request, response);
-            }
-        });
-    })*/
-    /*$('#artist').autocomplete({
-        source: function (request, response) {
-            $.post('/album/names', request, response);
-        }
-    });*/
-
     $('#artist').typeahead({
         name: 'artist',
         remote: {

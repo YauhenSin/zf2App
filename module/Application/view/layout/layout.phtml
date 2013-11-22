@@ -41,6 +41,7 @@
                         <li><a href="<?php echo $this->url('zfcuser/register'); ?>"><?php echo $this->translate('Registration') ?></a></li>
                         <li><a href="<?php echo $this->url('zfcuser/login'); ?>"><?php echo $this->translate('Sign In') ?></a></li>
                         <?php endif; ?>
+                        <li><a href="<?php echo $this->url('work/search'); ?>"><?php echo $this->translate('Search') ?></a></li>
                         <?php if ($this->isAllowed('controller/zfcuser:logout')) :?>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -57,7 +58,6 @@
                                 </ul>
                             </li>
                         <?php endif; ?>
-                        <li><a href="<?php echo $this->url('work/search'); ?>"><?php echo $this->translate('Search') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
