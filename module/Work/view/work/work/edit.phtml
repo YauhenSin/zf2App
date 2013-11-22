@@ -1,0 +1,30 @@
+<?php
+$form = $this->form;
+$form->prepare();
+?>
+
+<?php echo $this->form()->openTag($form); ?>
+    <div class="form-group">
+        <?php echo $this->formFile($form->get('workImage')); ?>
+        <?php echo $this->formElementErrors($form->get("workImage"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formInput($form->get('workName')->setAttribute('value', $this->work->getName())); ?>
+        <?php echo $this->formElementErrors($form->get("workName"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formSelect($form->get('workGenre')->setAttributes(array('options' => $this->genreList, 'value' => $this->work->getGenre()->getId()))); ?>
+        <?php echo $this->formElementErrors($form->get("workGenre"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formTextarea($form->get('workDescription')->setAttribute('value', $this->work->getDescription())); ?>
+        <?php echo $this->formElementErrors($form->get("workDescription"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formInput($form->get('workPrice')->setAttribute('value', $this->work->getPrice())); ?>
+        <?php echo $this->formElementErrors($form->get("workPrice"), array('class' => "alert alert-danger")); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formSubmit($form->get('submit')); ?>
+    </div>
+<?php echo $this->form()->closeTag(); ?>

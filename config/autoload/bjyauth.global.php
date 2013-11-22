@@ -26,7 +26,7 @@ return array(
                 array(
                     'controller' => 'zfcuser',
                     'action' => array('index', 'changepassword', 'changeemail', 'save'),
-                    'roles' => array('guest', 'user'),
+                    'roles' => array('guest', 'user', 'artist'),
                 ),
                 array(
                     'controller' => 'zfcuser',
@@ -36,7 +36,7 @@ return array(
                 array(
                     'controller' => 'zfcuser',
                     'action' => array('logout'),
-                    'roles' => array('user'),
+                    'roles' => array('user', 'artist'),
                 ),
 
                 array('controller' => 'Application\Controller\Index', 'roles' => array()),
@@ -44,18 +44,23 @@ return array(
                 array(
                     'controller' => 'Album\Controller\Album',
                     'action' => array('index'),
-                    'roles' => array('guest', 'user','administrator'),
+                    'roles' => array('guest', 'user', 'artist'),
                 ),
 
                 array(
                     'controller' => 'Album\Controller\Album',
                     'action' => array('add', 'names'),
-                    'roles' => array('administrator'),
+                    'roles' => array('user', 'artist'),
                 ),
                 array(
-                    'controller' => 'Work\Controller\Work',
-                    'action' => array('index'),
-                    'roles' => array('user'),
+                    'controller' => 'work',
+                    'action' => array('show', 'add', 'edit'),
+                    'roles' => array('artist'),
+                ),
+                array(
+                    'controller' => 'work',
+                    'action' => array('search'),
+                    'roles' => array('user', 'guest', 'artist'),
                 ),
             ),
         ),

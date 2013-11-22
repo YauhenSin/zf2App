@@ -1,0 +1,50 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/slider/js/bootstrap-slider.js');
+$this->headLink()->prependStylesheet($this->basePath() . '/slider/css/slider.css');
+$form = $this->form;
+$form->prepare();
+
+?>
+<div class="row">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <?php echo $this->formSelect($form->get('workGenre')->setAttribute('options', $this->genreList)); ?>
+                <?php echo $this->formElementErrors($form->get("workGenre"), array('class' => "alert alert-danger")); ?>
+            </div>
+        </div>
+        <div class="col-md-6">
+            Price: <input type="text" id="price" class="slider" data-slider-min="0" data-slider-max="500" data-slider-step="1" data-slider-value="[50, 450]" data-slider-orientation="horizontal">
+        </div>
+    </div>
+    <div id="search">
+        <?php echo $this->worksView;?>
+    </div>
+</div>
+<script>
+    var price = JSON.parse($('[data-slider-value]').attr('data-slider-value'));
+    search('', price);
+    $('.slider').slider()
+        .on('slideStop', function(ev){
+            price = ev.value;
+            var genre = document.getElementById("workGenre");
+            search(genre.options[genre.selectedIndex].value, ev.value);
+        });
+    $('.slider').css('width','80%');
+    $('#workGenre').change(function(){
+        search(this.value, price);
+    });
+    function search(genre, price)
+    {
+        $.ajax({
+            type: "POST",
+            url: '/work/search',
+            data: {workGenre:genre, workPrice:price},
+            success: function(works){
+                $('#search').empty();
+                $('#search').append(works);
+            }
+        });
+    }
+</script>

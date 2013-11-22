@@ -1,0 +1,26 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/lightbox/js/lightbox-2.6.min.js');
+$this->headLink()->prependStylesheet($this->basePath() . '/lightbox/css/lightbox.css');
+?>
+
+<?php $counter = 0; foreach ($this->works as $work):?>
+    <?php if ($counter == 3) $counter = 0;?>
+    <?php echo $counter == 0 ? '<div class="row">': '';?>
+    <div class="col-md-3 <?php echo $counter != 0 ? 'col-lg-offset-1': ''?>">
+        <div class="thumbnail" style="margin-bottom: 20px">
+            <a href="<?php echo ($this->imagePath . $work->getArtistId() . '/' . $work->getPictureHash());?>" data-lightbox="<?php echo $work->getPictureHash();?>" title="<?php echo $work->getName();?>"><img src="<?php echo $this->imagePath . $work->getArtistId() . '/' . $work->getPictureHash();?>" style="max-width: 100% ; height: 260px"></th></a>
+            <div class="caption">
+                <?php
+                if (isset($this->artistId) && $work->getArtistId() == $this->artistId) :?>
+                    <h3><a href="<?php echo $this->url('work/edit', array('id' => $work->getId()))?>"><?php echo $work->getName();?></a></h3>
+                <?php else :?>
+                    <h3><?php echo $work->getName();?></h3>
+                <?php endif;?>
+                <p>Genre: <?php echo $work->getGenre()->getName();?></p>
+                <p>Description:<br><?php echo $work->getDescription();?></p>
+                <p>Price: <?php echo $work->getPrice();?></p>
+            </div>
+        </div>
+    </div>
+    <?php echo $counter == 2 ? '</div>': ''; $counter++;?>
+<?php endforeach;?>
